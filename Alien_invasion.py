@@ -17,15 +17,25 @@ class AlienInvasion:
 	def run_game(self):
 		"""starting main cycles from game"""
 		while True:
-			# lookin for keys or mous anyone
-			for event in pygame.event.get():
-				if event.type==pygame.QUIT:
-					sys.exit()
-				self.screen.fill(self.settings.bg_color)
-				self.ship.blitme()
+			self._chek_events()
+			self._update_screen()
+			
+	def _chek_events (self):
+		# lookin for keys or mous anyone
+		for event in pygame.event.get():
+			if event.type==pygame.QUIT:
+				sys.exit()
 
-			#exponiren last painting screen
-			pygame.display.flip()
+	def _update_screen (self):
+		"""updating screen"""
+		self.screen.fill(self.settings.bg_color)
+		self.ship.blitme()
+
+		#exponiren last painting screen
+		pygame.display.flip()
+
+
+
 
 if __name__=='__main__':
 	# create new game
