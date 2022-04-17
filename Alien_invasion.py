@@ -1,6 +1,7 @@
 import sys
 import pygame
 from settings import Settings
+from ship import Ship
 
 class AlienInvasion:
 	""" Общий класс руководящий ресурсами и поведением игры"""
@@ -11,7 +12,7 @@ class AlienInvasion:
 		self.screen = pygame.display.set_mode(
 			(self.settings.screen_width, self.settings.screen_height))
 		pygame.display.set_caption("Alein invasion")
-		
+		self.ship=Ship(self)
 
 	def run_game(self):
 		"""starting main cycles from game"""
@@ -21,6 +22,7 @@ class AlienInvasion:
 				if event.type==pygame.QUIT:
 					sys.exit()
 				self.screen.fill(self.settings.bg_color)
+				self.ship.blitme()
 
 			#exponiren last painting screen
 			pygame.display.flip()
