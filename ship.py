@@ -40,3 +40,7 @@ class Ship:
 			self.acceleration+=self.settings.acceleration_ship
 		#updating rect.x, from x
 		self.rect.x=self.x
+
+	def center_ship(self):
+		self.rect.midbottom = self.screen_rect.midbottom
+		self.x=float(self.rect.x)
