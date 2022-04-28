@@ -7,7 +7,7 @@ class GameStats:
 		""" Statistic init"""
 		self.settings = ai_game.settings
 		self.reset_stats()
-		self.game_active=True
+		self.game_active=False
 		self.image=pygame.image.load('images/ship_live.bmp')
 		self.screen=ai_game.screen
 		self.rect=self.image.get_rect()

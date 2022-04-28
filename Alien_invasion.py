@@ -7,6 +7,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from random import randint
+from button import Button
 
 
 class AlienInvasion:
@@ -24,8 +25,26 @@ class AlienInvasion:
 		self.ship=Ship(self)
 		self.bullets = pygame.sprite.Group()
 		self.aliens=pygame.sprite.Group()
+		self.button_active=1
 
 		self._create_fleet()
+		#create button "play":
+		self.play_flier=Button(self, "Почати бій!", 
+			(self.settings.screen_width/2-self.settings.button_width/2), 
+				(self.settings.screen_height/2-self.settings.button_height/2)-
+					2*self.settings.button_height,(0, 191, 255))
+
+
+		self.play_button=Button(self, "Початківець",((self.settings.screen_width/2-self.settings.button_width/2)-1.5*self.settings.button_width), (self.settings.screen_height/2-self.settings.button_height/2))
+
+		self.play_button2=Button(self, "Гравець", 
+			(self.settings.screen_width/2-self.settings.button_width/2), 
+				(self.settings.screen_height/2-self.settings.button_height/2))
+
+		self.play_button3=Button(self, "Експерт", 
+			(self.settings.screen_width/2-self.settings.button_width/2+
+					1.5*self.settings.button_width), 
+					(self.settings.screen_height/2-self.settings.button_height/2))
 
 
 		
@@ -54,6 +73,7 @@ class AlienInvasion:
 			sleep (0.5)
 		else:
 			self.stats.game_active=False
+			pygame.mouse.set_visible(True)
 
 	def _update_aliens(self):
 		"""update aliens position"""
@@ -117,21 +137,59 @@ class AlienInvasion:
 				self._chek_keydown_events(event)
 			elif event.type == pygame.KEYUP:
 				self._chek_keyup_events(event)
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				self._chek_play_buttons(pygame.mouse.get_pos())
+
+	def _chek_play_buttons(self, mouse_pos=(0,0)):
+		if not self.stats.game_active:
+			if self.play_button.rect.collidepoint(mouse_pos) or self.button_active==0:
+				self.settings.initialize_dynamic_settings()
+				self._game_activ()
+			elif self.play_button2.rect.collidepoint(mouse_pos)or self.button_active==1:
+				self.settings.difficulty_level_2()
+				self._game_activ()
+			elif self.play_button3.rect.collidepoint(mouse_pos)or self.button_active==2:
+				self.settings.difficulty_level_3()
+				self._game_activ()
 			
-				
+
+	def _game_activ (self):
+		
+		self.stats.reset_stats()
+		self.stats.game_active=True
+		#clear screen
+		self.aliens.empty()
+		self.bullets.empty()
+		#create roundq
+		self._create_fleet()
+		self.ship.center_ship()
+		pygame.mouse.set_visible(False)
+
 
 	def _chek_keydown_events(self, event):
 		"""Keydown probe"""
 		if event.key==pygame.K_RIGHT:
 			# flay to right side
+			if not self.stats.game_active and self.button_active<2:
+				self.button_active+=1
+			elif not self.stats.game_active and self.button_active>=2:
+				self.button_active=0
+
 			self.ship.moving_right=True
 		elif event.key==pygame.K_LEFT:
+			if not self.stats.game_active and self.button_active>0:
+				self.button_active-=1
+			elif not self.stats.game_active and self.button_active<=0:
+				self.button_active=2
 			# flay to left side
 			self.ship.moving_left=True
-		elif event.key == pygame.K_q:
+		elif event.key == pygame.K_q or event.key==pygame.K_ESCAPE:
 					sys.exit()	
 		elif event.key == pygame.K_SPACE:
 			self._fire_bullet()
+		elif (event.key==pygame.K_KP_ENTER or event.key==pygame.K_RETURN) and (not self.stats.game_active):
+			self._chek_play_buttons()
+
 
 	def _update_bullets(self):
 		self.bullets.update()
@@ -155,6 +213,7 @@ class AlienInvasion:
 		if not self.aliens:
 			self.bullets.empty()
 			self._create_fleet()
+			self.settings.increase_speed()
 
 
 
@@ -187,8 +246,34 @@ class AlienInvasion:
 		self.aliens.draw(self.screen)
 		self.ship.blitme()
 		self.stats.life_blit()
+		# if game not activity painting button
+		if not self.stats.game_active:
+			self._create_menu()
+			self._update_menu()
 		for bullet in self.bullets.sprites():
 			bullet.draw_bullet()
+		pygame.display.flip()
+
+	def _create_menu(self):
+		self.play_flier.draw_button()
+		self.play_button.draw_button()
+		self.play_button2.draw_button()
+		self.play_button3.draw_button()
+
+	def _update_menu(self):
+		if self.button_active==0:
+			self.play_button.button_color=(255,255,0)
+			self.play_button2.button_color=(255,255,100)
+			self.play_button3.button_color=(255,255,100)
+		elif self.button_active==1:
+			self.play_button.button_color=(255,255,100)
+			self.play_button2.button_color=(255,255,0)
+			self.play_button3.button_color=(255,255,100)
+		elif self.button_active==2:
+			self.play_button.button_color=(255,255,100)
+			self.play_button2.button_color=(255,255,100)
+			self.play_button3.button_color=(255,255,0)
+
 
 
 		

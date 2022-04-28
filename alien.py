@@ -2,6 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 from random import randint
 
+
 class Alien (Sprite):
 	"""Class for one alien from float"""
 	def __init__(self, ai_game):
@@ -46,9 +47,9 @@ class Alien (Sprite):
 
 	def update (self):
 		"""Go alien right"""
-		self.x +=(self.settings.alien_speed*self.settings.fleet_direction)#+randint(-1,1)
+		self.x +=(self.settings.alien_speed*self.settings.fleet_direction)
 		self.rect.x=self.x
-		self.rect.y=self.rect.y+randint(0,25)//25
+		self.rect.y=self.rect.y+randint(0, 100)//self.settings.random_go
 
 		if self.bum_flag:
 			self.explosion_alien()

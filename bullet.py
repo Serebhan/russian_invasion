@@ -8,7 +8,7 @@ class Bullet(Sprite):
 		super().__init__()
 		self.screen = ai_game.screen
 		self.settings = ai_game.settings
-		self.color= self.settings.bullet_color
+		#self.color= self.settings.bullet_color
 		self.rocet_image1 = pygame.image.load('images/rocet1.bmp')
 		self.rocet_image2 = pygame.image.load('images/rocet2.bmp')
 		self.rocet_image3 = pygame.image.load('images/rocet3.bmp')
