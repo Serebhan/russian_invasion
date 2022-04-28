@@ -35,7 +35,10 @@ class AlienInvasion:
 					2*self.settings.button_height,(0, 191, 255))
 
 
-		self.play_button=Button(self, "Початківець",((self.settings.screen_width/2-self.settings.button_width/2)-1.5*self.settings.button_width), (self.settings.screen_height/2-self.settings.button_height/2))
+		self.play_button=Button(self, "Початківець",
+			((self.settings.screen_width/2-self.settings.button_width/2)
+				-1.5*self.settings.button_width), 
+					(self.settings.screen_height/2-self.settings.button_height/2))
 
 		self.play_button2=Button(self, "Гравець", 
 			(self.settings.screen_width/2-self.settings.button_width/2), 
@@ -138,17 +141,17 @@ class AlienInvasion:
 			elif event.type == pygame.KEYUP:
 				self._chek_keyup_events(event)
 			elif event.type == pygame.MOUSEBUTTONDOWN:
-				self._chek_play_buttons(pygame.mouse.get_pos())
+				self._chek_play_buttons(False, pygame.mouse.get_pos())
 
-	def _chek_play_buttons(self, mouse_pos=(0,0)):
+	def _chek_play_buttons(self,key, mouse_pos=(0,0)):
 		if not self.stats.game_active:
-			if self.play_button.rect.collidepoint(mouse_pos) or self.button_active==0:
+			if self.play_button.rect.collidepoint(mouse_pos) or (self.button_active==0 and key==True):
 				self.settings.initialize_dynamic_settings()
 				self._game_activ()
-			elif self.play_button2.rect.collidepoint(mouse_pos)or self.button_active==1:
+			elif self.play_button2.rect.collidepoint(mouse_pos) or (self.button_active==1 and key==True):
 				self.settings.difficulty_level_2()
 				self._game_activ()
-			elif self.play_button3.rect.collidepoint(mouse_pos)or self.button_active==2:
+			elif self.play_button3.rect.collidepoint(mouse_pos) or (self.button_active==2 and key==True):
 				self.settings.difficulty_level_3()
 				self._game_activ()
 			
@@ -188,7 +191,7 @@ class AlienInvasion:
 		elif event.key == pygame.K_SPACE:
 			self._fire_bullet()
 		elif (event.key==pygame.K_KP_ENTER or event.key==pygame.K_RETURN) and (not self.stats.game_active):
-			self._chek_play_buttons()
+			self._chek_play_buttons(True)
 
 
 	def _update_bullets(self):
@@ -263,15 +266,15 @@ class AlienInvasion:
 	def _update_menu(self):
 		if self.button_active==0:
 			self.play_button.button_color=(255,255,0)
-			self.play_button2.button_color=(255,255,100)
-			self.play_button3.button_color=(255,255,100)
+			self.play_button2.button_color=(255,255,150)
+			self.play_button3.button_color=(255,255,150)
 		elif self.button_active==1:
-			self.play_button.button_color=(255,255,100)
+			self.play_button.button_color=(255,255,150)
 			self.play_button2.button_color=(255,255,0)
-			self.play_button3.button_color=(255,255,100)
+			self.play_button3.button_color=(255,255,150)
 		elif self.button_active==2:
-			self.play_button.button_color=(255,255,100)
-			self.play_button2.button_color=(255,255,100)
+			self.play_button.button_color=(255,255,150)
+			self.play_button2.button_color=(255,255,150)
 			self.play_button3.button_color=(255,255,0)
 
 
