@@ -8,7 +8,7 @@ from bullet import Bullet
 from alien import Alien
 from random import randint
 from button import Button
-
+from score_board import Scoreboard
 
 class AlienInvasion:
 	""" Общий класс руководящий ресурсами и поведением игры"""
@@ -20,10 +20,11 @@ class AlienInvasion:
 #		self.screen = pygame.display.set_mode((1200,800))
 		self.settings.screen_width=self.screen.get_rect().width
 		self.settings.screen_height=self.screen.get_rect().height
-		pygame.display.set_caption("Бомби пришельцев!")
+		pygame.display.set_caption("Перемагай загарбників!")
 		self.stats=GameStats(self)
+		self.sb=Scoreboard(self)
 		self.ship=Ship(self)
-		self.bullets = pygame.sprite.Group()
+		self.bullets = pygame.sprite.Group() 
 		self.aliens=pygame.sprite.Group()
 		self.button_active=1
 
@@ -160,6 +161,8 @@ class AlienInvasion:
 		
 		self.stats.reset_stats()
 		self.stats.game_active=True
+		self.sb.prep_score()
+		self.sb.prep_level()
 		#clear screen
 		self.aliens.empty()
 		self.bullets.empty()
@@ -209,6 +212,9 @@ class AlienInvasion:
 		for key, wal in collisions.items():
 			bum=pygame.sprite.spritecollideany(key,wal)
 			if not bum.bum_flag:
+				self.stats.score+=self.settings.alien_points
+				self.sb.prep_score()
+				self.sb.chek_high_score()
 				self.bullets.remove(key)
 				bum.bum_flag=True
 				bum.bum_number=bum
@@ -217,6 +223,8 @@ class AlienInvasion:
 			self.bullets.empty()
 			self._create_fleet()
 			self.settings.increase_speed()
+			self.stats.level+=1
+			self.sb.prep_level()
 
 
 
@@ -247,6 +255,7 @@ class AlienInvasion:
 		"""updating screen"""
 		self.screen.fill(self.settings.bg_color)
 		self.aliens.draw(self.screen)
+		self.sb.show_score()
 		self.ship.blitme()
 		self.stats.life_blit()
 		# if game not activity painting button

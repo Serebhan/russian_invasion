@@ -12,10 +12,16 @@ class GameStats:
 		self.screen=ai_game.screen
 		self.rect=self.image.get_rect()
 		self.rect.y=0
+		self.high_score=0
+		
+
 
 	def reset_stats(self):
 		""" statistiks change"""
 		self.ships_left = self.settings.ship_limit
+		self.score=0
+		self.level=1
+
 
 	def life_blit (self):
 		for i in range (self.ships_left):
