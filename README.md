@@ -1,5 +1,8 @@
 # russian_invasion
 Attack of Russian bombers, the Millennium Falcon under the flag of Ukraine confronts them. Try to win!
+
+"Alien invasion" is include main class and it is file for run game.
+
 What to add to the project:
 
 - Sounds, they are already there and collected in the sounds folder. Others can be suggested
